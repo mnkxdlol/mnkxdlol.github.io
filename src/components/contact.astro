@@ -1,0 +1,54 @@
+<section id="contact" class="w-full py-20 border-t border-[#ffffff10]">
+  <div class="max-w-5xl mx-auto px-4 text-center">
+    <h2 class="text-lg text-[var(--sec)] mb-2 shiny-sec">Let's talk</h2>
+    <h3 class="text-4xl md:text-5xl font-medium text-[var(--white)] mb-10">
+      Contact <span id="typed" class="text-[var(--sec)]"></span>
+    </h3>
+
+    <div class="flex justify-center items-center">
+      <div class="relative group cursor-pointer select-none" id="emailWrapper">
+        <span id="emailText" class="text-xl text-[var(--white)] px-6 py-3 border border-[var(--white-icon-tr)] rounded-lg bg-[#1414149c] hover:bg-[var(--white-icon-tr)] transition duration-300">
+          mnk222dev@gmail.com
+        </span>
+        <span
+          id="copyTooltip"
+          class="absolute left-1/2 -translate-x-1/2 top-full mt-2 text-sm text-[var(--sec)] transition-opacity duration-300 opacity-0 group-hover:opacity-100"
+        >
+          Copy?
+        </span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script type="module">
+  import TypeIt from "https://cdn.jsdelivr.net/npm/typeit@8.7.1/+esm";
+  new TypeIt("#typed", {
+    strings: ["me", "for a project", "to collaborate", "to chat 👋"],
+    speed: 50,
+    breakLines: false,
+    loop: true,
+  }).go();
+
+  window.addEventListener("DOMContentLoaded", () => {
+    const tooltip = document.getElementById("copyTooltip");
+    const emailWrapper = document.getElementById("emailWrapper");
+    const originalText = tooltip.textContent;
+
+    emailWrapper.addEventListener("click", () => {
+      const email = "mnk222dev@gmail.com";
+      navigator.clipboard.writeText(email).then(() => {
+        tooltip.textContent = "Copied!";
+        tooltip.classList.add("opacity-100");
+        tooltip.classList.remove("text-[var(--sec)]");
+        tooltip.classList.add("text-green-400");
+
+        setTimeout(() => {
+          tooltip.textContent = originalText;
+          tooltip.classList.remove("text-green-400");
+          tooltip.classList.add("text-[var(--sec)]");
+        }, 2000);
+      });
+    });
+  });
+</script>
