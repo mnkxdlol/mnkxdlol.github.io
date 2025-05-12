@@ -33,6 +33,8 @@ jobs:
     name: Build
     runs-on: ubuntu-latest
     steps:
+      - name: Setup pnpm
+      - uses: pnpm/action-setup@v4.1.0
       - name: Checkout
         uses: actions/checkout@v4
       - name: Detect package manager
@@ -68,7 +70,7 @@ jobs:
         working-directory: ${{ env.BUILD_PATH }}
       - name: Build with Astro
         run: |
-          ${{ steps.detect-package-manager.outputs.runner }} astro build \
+          pnpm astro build \
             --site "${{ steps.pages.outputs.origin }}" \
             --base "${{ steps.pages.outputs.base_path }}"
         working-directory: ${{ env.BUILD_PATH }}
