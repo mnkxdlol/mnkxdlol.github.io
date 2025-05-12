@@ -2,7 +2,7 @@
 
 This is my personal website for showcasing my portfolio.
 
-[Visit the site]
+[Visit the site](https://mnkxdlol.github.io/)
 
 ---
 
