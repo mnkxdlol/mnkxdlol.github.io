@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { JSX, useState } from "react";
 
 const CategoryIcons: Record<string, JSX.Element> = {
   "Game Development": (
