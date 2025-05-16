@@ -20,6 +20,9 @@ const LetterGlitch = ({
   const context = useRef<CanvasRenderingContext2D | null>(null);
   const lastGlitchTime = useRef(Date.now());
   const revealQueue = useRef<number[]>([]);
+  const [clickCount, setClickCount] = useState(0);
+  const [glitchMessage, setGlitchMessage] = useState<string>("");
+  const messageStarted = useRef(false);
 
   const fontSize = 18;
   const charWidth = 10;
@@ -38,7 +41,6 @@ const LetterGlitch = ({
   ];
 
   const lettersAndSymbols = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+-=[]{}|;:',.<>?/\\~".split("");
-
   const getRandomChar = () => lettersAndSymbols[Math.floor(Math.random() * lettersAndSymbols.length)];
   const getRandomColor = () => glitchColors[Math.floor(Math.random() * glitchColors.length)];
 
@@ -56,12 +58,10 @@ const LetterGlitch = ({
     return `rgb(${r}, ${g}, ${b})`;
   };
 
-  const calculateGrid = (width: number, height: number) => {
-    return {
-      columns: Math.floor(width / charWidth),
-      rows: Math.floor(height / charHeight),
-    };
-  };
+  const calculateGrid = (width: number, height: number) => ({
+    columns: Math.floor(width / charWidth),
+    rows: Math.floor(height / charHeight),
+  });
 
   const initializeLetters = (columns: number, rows: number) => {
     grid.current = { columns, rows };
@@ -72,7 +72,6 @@ const LetterGlitch = ({
     letters.current = Array.from({ length: columns * rows }, (_, i) => {
       const x = i % columns;
       const y = Math.floor(i / columns);
-
       return {
         x,
         y,
@@ -84,7 +83,6 @@ const LetterGlitch = ({
       };
     });
 
-  
     revealQueue.current = [];
     logo.forEach((line, rowIdx) => {
       const y = midRow + rowIdx;
@@ -101,7 +99,6 @@ const LetterGlitch = ({
   const drawLetters = () => {
     const ctx = context.current;
     if (!ctx) return;
-
     const { width, height } = canvasRef.current!.getBoundingClientRect();
     ctx.clearRect(0, 0, width, height);
     ctx.font = `${fontSize}px monospace`;
@@ -121,30 +118,11 @@ const LetterGlitch = ({
       const idx = Math.floor(Math.random() * letters.current.length);
       const letter = letters.current[idx];
       if (!letter || letter.fixed) continue;
-
       letter.char = getRandomChar();
       letter.targetColor = getRandomColor();
       letter.colorProgress = smooth ? 0 : 1;
       if (!smooth) letter.color = letter.targetColor;
     }
-  };
-
-  const handleSmoothTransitions = () => {
-    let needsRedraw = false;
-    letters.current.forEach((letter) => {
-      if (letter.colorProgress < 1) {
-        letter.colorProgress += 0.05;
-        if (letter.colorProgress > 1) letter.colorProgress = 1;
-
-        const start = hexToRgb(letter.color);
-        const end = hexToRgb(letter.targetColor);
-        if (start && end) {
-          letter.color = interpolateColor(start, end, letter.colorProgress);
-          needsRedraw = true;
-        }
-      }
-    });
-    if (needsRedraw) drawLetters();
   };
 
   const animate = () => {
@@ -154,17 +132,87 @@ const LetterGlitch = ({
       drawLetters();
       lastGlitchTime.current = now;
     }
-    if (smooth) handleSmoothTransitions();
+    if (smooth) {
+      let needsRedraw = false;
+      letters.current.forEach((letter) => {
+        if (letter.colorProgress < 1) {
+          letter.colorProgress += 0.05;
+          if (letter.colorProgress > 1) letter.colorProgress = 1;
+          const start = hexToRgb(letter.color);
+          const end = hexToRgb(letter.targetColor);
+          if (start && end) {
+            letter.color = interpolateColor(start, end, letter.colorProgress);
+            needsRedraw = true;
+          }
+        }
+      });
+      if (needsRedraw) drawLetters();
+    }
     animationRef.current = requestAnimationFrame(animate);
+  };
+
+  const resizeCanvas = () => {
+    const canvas = canvasRef.current;
+    if (!canvas || !canvas.parentElement) return;
+    const dpr = window.devicePixelRatio || 1;
+    const rect = canvas.parentElement.getBoundingClientRect();
+    canvas.width = rect.width * dpr;
+    canvas.height = rect.height * dpr;
+    canvas.style.width = `${rect.width}px`;
+    canvas.style.height = `${rect.height}px`;
+    if (context.current) context.current.setTransform(dpr, 0, 0, dpr, 0, 0);
+    const { columns, rows } = calculateGrid(rect.width, rect.height);
+    initializeLetters(columns, rows);
+    drawLetters();
+  };
+
+  const handleEasterEgg = () => {
+    if (messageStarted.current) return;
+    messageStarted.current = true;
+    const full = "cats will dominate the world";
+    let i = 0;
+    const interval = setInterval(() => {
+      if (i <= full.length) {
+        setGlitchMessage(full.slice(0, i));
+        i++;
+      } else {
+        clearInterval(interval);
+      }
+    }, 100);
   };
 
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
-
     context.current = canvas.getContext("2d");
     resizeCanvas();
     animate();
+    const revealInterval = setInterval(() => {
+      if (revealQueue.current.length > 0) {
+        const index = revealQueue.current.shift()!;
+        const letter = letters.current[index];
+        if (letter) {
+          const col = index % grid.current.columns;
+          const row = Math.floor(index / grid.current.columns);
+          const offset = Math.floor((grid.current.columns - Math.max(...logo.map(l => l.length))) / 2);
+          const line = row - Math.floor((grid.current.rows - logo.length) / 2);
+          const char = logo[line]?.[col - offset] || " ";
+          if (char !== " ") {
+            letters.current[index] = {
+              x: col,
+              y: row,
+              char,
+              color: "#ffffff",
+              targetColor: "#ffffff",
+              colorProgress: 1,
+              fixed: true,
+            };
+          }
+        }
+      } else {
+        clearInterval(revealInterval);
+      }
+    }, 120);
 
     const handleResize = () => {
       cancelAnimationFrame(animationRef.current!);
@@ -172,29 +220,16 @@ const LetterGlitch = ({
       animate();
     };
 
-    
-    const revealInterval = setInterval(() => {
-      if (revealQueue.current.length > 0) {
-        const index = revealQueue.current.shift()!;
-        const col = index % grid.current.columns;
-        const row = Math.floor(index / grid.current.columns);
-        const line = row - Math.floor((grid.current.rows - logo.length) / 2);
-        const char = logo[line]?.[col - Math.floor((grid.current.columns - Math.max(...logo.map(l => l.length))) / 2)];
-        if (char) {
-          letters.current[index] = {
-            x: col,
-            y: row,
-            char,
-            color: "#ffffff",
-            targetColor: "#ffffff",
-            colorProgress: 1,
-            fixed: true,
-          };
+    canvas.addEventListener("click", () => {
+      setClickCount((c) => {
+        const newCount = c + 1;
+        if (newCount >= 3) {
+          letters.current = letters.current.map((l) => l.fixed ? { ...l, char: " " } : l);
+          handleEasterEgg();
         }
-      } else {
-        clearInterval(revealInterval);
-      }
-    }, 120);
+        return newCount;
+      });
+    });
 
     window.addEventListener("resize", handleResize);
     return () => {
@@ -204,24 +239,6 @@ const LetterGlitch = ({
     };
   }, []);
 
-  const resizeCanvas = () => {
-    const canvas = canvasRef.current;
-    if (!canvas || !canvas.parentElement) return;
-
-    const dpr = window.devicePixelRatio || 1;
-    const rect = canvas.parentElement.getBoundingClientRect();
-    canvas.width = rect.width * dpr;
-    canvas.height = rect.height * dpr;
-    canvas.style.width = `${rect.width}px`;
-    canvas.style.height = `${rect.height}px`;
-
-    if (context.current) context.current.setTransform(dpr, 0, 0, dpr, 0, 0);
-
-    const { columns, rows } = calculateGrid(rect.width, rect.height);
-    initializeLetters(columns, rows);
-    drawLetters();
-  };
-
   return (
     <div className="relative w-full h-full bg-[#101010] overflow-hidden">
       <canvas ref={canvasRef} className="block w-full h-full" />
@@ -230,6 +247,11 @@ const LetterGlitch = ({
       )}
       {centerVignette && (
         <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(circle,_rgba(0,0,0,0.8)_0%,_rgba(0,0,0,0)_60%)]" />
+      )}
+      {glitchMessage.length > 0 && (
+        <div className="absolute inset-0 flex items-center justify-center text-white text-2xl font-mono animate-pulse">
+          {glitchMessage}
+        </div>
       )}
     </div>
   );
