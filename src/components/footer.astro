@@ -8,10 +8,10 @@
               {
                 href: "https://krissh.wtf",
                 icon: `
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="size-8" viewBox="0 0 24 24">
-                    <path d="M12 2c1.7 0 3.29.5 4.63 1.36L20.29 1 23 3.71l-2.36 3.66A9.94 9.94 0 0 1 22 12c0 5.52-4.48 10-10 10S2 17.52 2 12 6.48 2 12 2zm0 2C7.59 4 4 7.59 4 12s3.59 8 8 8 8-3.59 8-8c0-1.59-.47-3.06-1.27-4.3l-2.29 3.56-3.88-5.83c-.53-.79-1.69-.78-2.22 0L7.27 13.3A8.03 8.03 0 0 0 12 20c4.41 0 8-3.59 8-8s-3.59-8-8-8z"/>
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" class="size-6">
+                    <path d="M12 2a10 10 0 100 20 10 10 0 000-20zm7.93 8h-2.02a15.82 15.82 0 00-1.33-4.31A8.03 8.03 0 0119.93 10zM12 4c1.19 0 2.84 2.4 3.34 6h-6.68C9.16 6.4 10.81 4 12 4zM8.05 5.69A15.82 15.82 0 006.72 10H4.7a8.03 8.03 0 013.35-4.31zM4.07 14h2.02a15.82 15.82 0 001.33 4.31A8.03 8.03 0 014.07 14zM12 20c-1.19 0-2.84-2.4-3.34-6h6.68c-.5 3.6-2.15 6-3.34 6zm3.95-1.69A15.82 15.82 0 0017.28 14h2.02a8.03 8.03 0 01-3.35 4.31zM17.28 12a15.82 15.82 0 00-1.33-4h-7.9a15.82 15.82 0 00-1.33 4h10.56zm-10.56 2a15.82 15.82 0 001.33 4h7.9a15.82 15.82 0 001.33-4H6.72z"/>
                   </svg>`,
-                label: "Sidekick Website",
+                label: "Friend Website",
                 text: "Website of my friend",
               },
             ].map((link) => (
@@ -24,7 +24,7 @@
                 <div class="text-[var(--white-icon)]">
                   <div set:html={link.icon} />
                 </div>
-                <span class="text-sm font-medium group-hover:translate-x-1 transition-transform">
+                <span class="text-sm font-medium bg-gradient-to-r from-purple-400 via-fuchsia-500 to-pink-500 bg-clip-text text-transparent animate-pulse">
                   {link.text}
                 </span>
               </a>
