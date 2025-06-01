@@ -58,8 +58,8 @@ const SkillsList = () => {
   };
 
   return (
-    <div className="text-left pt-3 md:pt-9">
-      <h3 className="text-[var(--white)] text-3xl md:text-4xl font-semibold md:mb-6">
+    <div className="text-left pt-3 md:pt-9 px-2 md:px-0 max-w-xl mx-auto">
+      <h3 className="text-[var(--white)] text-2xl sm:text-3xl md:text-4xl font-semibold md:mb-6 mb-4">
         My Skills and what I did at Deloitte.
       </h3>
       <ul className="space-y-4 mt-4 text-lg">
@@ -67,13 +67,19 @@ const SkillsList = () => {
           <li key={category} className="w-full">
             <div
               onClick={() => toggleItem(category)}
-              className="md:w-[400px] w-full bg-[#1414149c] rounded-2xl text-left hover:bg-opacity-80 transition-all border border-[var(--white-icon-tr)] cursor-pointer overflow-hidden"
+              className="w-full bg-[#18181b] bg-opacity-90 rounded-2xl text-left hover:bg-opacity-100 transition-all border border-[var(--white-icon-tr)] cursor-pointer overflow-hidden shadow-md"
+              style={{
+                boxShadow:
+                  openItem === category
+                    ? "0 4px 24px 0 rgba(0,0,0,0.25)"
+                    : "0 2px 8px 0 rgba(0,0,0,0.10)",
+              }}
             >
               <div className="flex items-center gap-3 p-4">
-                {CategoryIcons[category] || null}
+                <div className="flex-shrink-0">{CategoryIcons[category] || null}</div>
                 <div className="flex items-center gap-2 flex-grow justify-between">
-                  <div className="min-w-0 max-w-[200px] md:max-w-none overflow-hidden">
-                    <span className="block truncate text-[var(--white)] text-lg">
+                  <div className="min-w-0 max-w-[140px] sm:max-w-[200px] md:max-w-none overflow-hidden">
+                    <span className="block truncate text-[var(--white)] text-base sm:text-lg font-medium">
                       {category}
                     </span>
                   </div>
@@ -96,13 +102,16 @@ const SkillsList = () => {
                     ? "max-h-[500px] pb-4 opacity-100"
                     : "max-h-0 opacity-0"
                 }`}
+                style={{
+                  transitionProperty: "max-height, opacity, padding-bottom",
+                }}
               >
-                <ul className="space-y-2 text-[var(--white-icon)] text-sm">
+                <ul className="space-y-2 text-[var(--white-icon)] text-sm sm:text-base">
                   {items.map((item, index) => (
-                    <div key={index} className="flex items-center">
-                      <span className="pl-1">•</span>
-                      <li className="pl-3">{item}</li>
-                    </div>
+                    <li key={index} className="flex items-start gap-2">
+                      <span className="text-[var(--sec)] mt-1">•</span>
+                      <span className="pl-1">{item}</span>
+                    </li>
                   ))}
                 </ul>
               </div>
