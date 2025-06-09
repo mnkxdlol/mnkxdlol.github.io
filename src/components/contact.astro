@@ -1,54 +1,80 @@
-<section id="contact" class="w-full py-20 border-t border-[#ffffff10]">
-  <div class="max-w-5xl mx-auto px-4 text-center">
-    <h2 class="text-lg text-[var(--sec)] mb-2 shiny-sec">Let's talk</h2>
-    <h3 class="text-4xl md:text-5xl font-medium text-[var(--white)] mb-10">
-      Contact <span id="typed" class="text-[var(--sec)]"></span>
-    </h3>
-
-    <div class="flex justify-center items-center">
-      <div class="relative group cursor-pointer select-none" id="emailWrapper">
-        <span id="emailText" class="text-xl text-[var(--white)] px-6 py-3 border border-[var(--white-icon-tr)] rounded-lg bg-[#1414149c] hover:bg-[var(--white-icon-tr)] transition duration-300">
-          me@mnk.wtf
-        </span>
-        <span
-          id="copyTooltip"
-          class="absolute left-1/2 -translate-x-1/2 top-full mt-2 text-sm text-[var(--sec)] transition-opacity duration-300 opacity-0 group-hover:opacity-100"
-        >
-          Copy?
-        </span>
+<section id="contact" class="w-full py-20 border-t border-[#ffffff10] bg-[#0e0e0e] relative">
+  <div class="max-w-6xl mx-auto px-4 flex flex-col md:flex-row items-center justify-between gap-10">
+    
+    <div class="md:w-1/2 text-center md:text-left space-y-4">
+      <h2 class="text-lg text-[var(--sec)] shiny-sec">Let's talk</h2>
+      <h3 class="text-4xl md:text-5xl font-bold text-[var(--white)] leading-tight">
+        Contact <span id="typed" class="text-[var(--sec)]"></span>
+      </h3>
+      <p class="text-[var(--white-icon-tr)] text-base max-w-md">
+        I'm open to collaborations, freelance work, or just a friendly chat. Use the form to get in touch!
+      </p>
+      <div class="text-lg text-[var(--white)] px-6 py-3 border border-[var(--white-icon-tr)] rounded-lg bg-[#1414149c] w-fit mx-auto md:mx-0">
+        me@mnk.wtf
       </div>
     </div>
+    <script>
+      if (typeof window !== "undefined") {
+        window.addEventListener("pageshow", function () {
+          document.getElementById("name").value = "";
+          document.getElementById("email").value = "";
+          document.getElementById("subject").value = "";
+          document.getElementById("message").value = "";
+        });
+      }
+    </script>
+    <form action="https://formspree.io/f/manjepvl" method="POST" class="md:w-1/2 w-full bg-[#1a1a1a] p-6 rounded-xl shadow-lg space-y-4 border border-[#ffffff10]" onsubmit="handleSubmit(event)">
+      <div>
+        <label class="block text-sm text-[var(--white)] mb-1" for="name">Your Name</label>
+        <input type="text" id="name" name="name" required class="w-full p-3 rounded-lg bg-[#0e0e0e] border border-[var(--white-icon-tr)] text-white outline-none focus:ring-2 focus:ring-[var(--sec)]" />
+      </div>
+      <div>
+        <label class="block text-sm text-[var(--white)] mb-1" for="email">Email</label>
+        <input type="email" id="email" name="email" required class="w-full p-3 rounded-lg bg-[#0e0e0e] border border-[var(--white-icon-tr)] text-white outline-none focus:ring-2 focus:ring-[var(--sec)]" />
+      </div>
+      <div>
+        <label class="block text-sm text-[var(--white)] mb-1" for="subject">Subject</label>
+        <input type="text" id="subject" name="subject" required class="w-full p-3 rounded-lg bg-[#0e0e0e] border border-[var(--white-icon-tr)] text-white outline-none focus:ring-2 focus:ring-[var(--sec)]" />
+      </div>
+      <div>
+        <label class="block text-sm text-[var(--white)] mb-1" for="message">Message</label>
+        <textarea id="message" name="message" rows="4" required class="w-full p-3 rounded-lg bg-[#0e0e0e] border border-[var(--white-icon-tr)] text-white outline-none focus:ring-2 focus:ring-[var(--sec)]"></textarea>
+      </div>
+      <button type="submit" class="w-full bg-[var(--sec)] text-black font-semibold py-3 rounded-lg hover:opacity-90 transition">
+        Send Message
+      </button>
+    </form>
   </div>
-</section>
 
-<script type="module">
-  import TypeIt from "https://cdn.jsdelivr.net/npm/typeit@8.7.1/+esm";
-  new TypeIt("#typed", {
-    strings: ["me", "for a project", "to collaborate", "to chat 👋"],
-    speed: 50,
-    breakLines: false,
-    loop: true,
-  }).go();
+  <div id="popup" class="hidden fixed top-6 right-6 bg-green-600 text-white px-6 py-4 rounded-lg shadow-xl z-50 flex items-center justify-between gap-4">
+    <span>✅ Message sent! I’ll reply soon so check your email box ;)</span>
+    <button onclick="document.getElementById('popup').classList.add('hidden')" class="text-lg">✖</button>
+  </div>
 
-  window.addEventListener("DOMContentLoaded", () => {
-    const tooltip = document.getElementById("copyTooltip");
-    const emailWrapper = document.getElementById("emailWrapper");
-    const originalText = tooltip.textContent;
+  <script type="module">
+    import TypeIt from "https://cdn.jsdelivr.net/npm/typeit@8.7.1/+esm";
+    new TypeIt("#typed", {
+      strings: ["me", "for a project", "to collaborate", "to chat 👋"],
+      speed: 50,
+      breakLines: false,
+      loop: true,
+    }).go();
+  </script>
 
-    emailWrapper.addEventListener("click", () => {
-      const email = "mnk222dev@gmail.com";
-      navigator.clipboard.writeText(email).then(() => {
-        tooltip.textContent = "Copied!";
-        tooltip.classList.add("opacity-100");
-        tooltip.classList.remove("text-[var(--sec)]");
-        tooltip.classList.add("text-green-400");
+  <script>
+    function handleSubmit(e) {
+      e.preventDefault();
+      const form = e.target;
+      const data = new FormData(form);
 
-        setTimeout(() => {
-          tooltip.textContent = originalText;
-          tooltip.classList.remove("text-green-400");
-          tooltip.classList.add("text-[var(--sec)]");
-        }, 2000);
+      fetch(form.action, {
+        method: form.method,
+        body: data,
+        headers: { 'Accept': 'application/json' }
+      }).then(() => {
+        document.getElementById('popup').classList.remove('hidden');
+        form.reset();
       });
-    });
-  });
-</script>
+    }
+  </script>
+</section>
