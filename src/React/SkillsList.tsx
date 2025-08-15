@@ -11,7 +11,7 @@ const CategoryIcons: Record<string, JSX.Element> = {
       <path d="M21 3C21.5523 3 22 3.44772 22 4V20C22 20.5523 21.5523 21 21 21H3C2.44772 21 2 20.5523 2 20V4C2 3.44772 2.44772 3 3 3H21ZM20 11H4V19H20V11ZM20 5H4V9H20V5ZM11 6V8H9V6H11ZM7 6V8H5V6H7Z" />
     </svg>
   ),
-  "Small knowledge in Pentesting": (
+  "Knowledge in Pentesting": (
     <svg
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 24 24"
@@ -39,17 +39,23 @@ const SkillsList = () => {
   const skills = {
     "Game Development": [
       "Anti-Cheat development",
-      "Lua Scripting for Gameplay Mechanics",
+      "Luau Scripting for Gameplay Mechanics",
       "Multiplayer Game Architecture",
+      "Game Testing and Debugging",
     ],
-    "Small knowledge in Pentesting": [
+    "Knowledge in Pentesting": [
       "Port & Vulnerabilty Scanning",
       "Automated OSINT Gathering",
+      "Web Application Testing",
+      "Network Penetration Testing",
+      "Social Engineering Techniques",
+      "Reverse Engineering",
     ],
     "Cybersecurity Consulting": [
       "Assisted on IAM Projects",
       "Learned Security Best Practices",
       "Learn for the AZ-900 Certification",
+      
     ],
   };
 
@@ -60,7 +66,7 @@ const SkillsList = () => {
   return (
     <div className="text-left pt-3 md:pt-9 px-2 md:px-0 max-w-xl mx-auto">
       <h3 className="text-[var(--white)] text-2xl sm:text-3xl md:text-4xl font-semibold md:mb-6 mb-4">
-        My Skills and what I did at Deloitte.
+        Skills & Expertise :
       </h3>
       <ul className="space-y-4 mt-4 text-lg">
         {Object.entries(skills).map(([category, items]) => (
