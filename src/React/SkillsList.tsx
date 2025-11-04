@@ -46,8 +46,6 @@ const SkillsList = () => {
     "Knowledge in Pentesting": [
       "Port & Vulnerabilty Scanning",
       "Automated OSINT Gathering",
-      "Web Application Testing",
-      "Network Penetration Testing",
       "Social Engineering Techniques",
       "Reverse Engineering",
     ],
