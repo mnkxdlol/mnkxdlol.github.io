@@ -1,62 +1,32 @@
 ---
 const technologies = [
-  { name: "luau", percent: 75 },
-  { name: "python", percent: 90 },
-  { name: "javascript", percent: 60 },
-  { name: "C", percent: 40 },
-  { name: "assembly", percent: 10 },
-  { name: "mysql", percent: 60 },
+  { name: "luau"},
+  { name: "python"},
+  { name: "javascript"},
+  { name: "C"},
+  { name: "assembly"},
+  { name: "mysql"},
 ];
 
-function getLevel(percent) {
-  if (percent >= 80) return "Experimented";
-  if (percent >= 60) return "Intermediate";
-  return "Still learning";
-}
-
-function isMastered(percent) {
-  return percent >= 75;
-}
 ---
 
-<div class="relative overflow-x-hidden py-8">
-  <div
-    class="pointer-events-none absolute inset-y-0 left-0 w-32 bg-gradient-to-r from-[var(--background)] to-transparent z-20"
-  ></div>
-  <div
-    class="pointer-events-none absolute inset-y-0 right-0 w-32 bg-gradient-to-l from-[var(--background)] to-transparent z-20"
-  ></div>
 
-  <div class="flex animate-scroll hover:animate-paused gap-12 md:gap-20 w-max">
-    {
-      [...technologies, ...technologies, ...technologies].map((tech) => {
-        const level = getLevel(tech.percent);
-        const mastered = isMastered(tech.percent);
-        return (
-          <div class={`flex flex-col items-center gap-2 group transition-all duration-300 min-w-[120px] px-4 py-3 rounded-xl bg-[var(--background-secondary)] shadow-md ${mastered ? "rainbow-glow-soft" : ""}`}>
-            <img
-              src={`/svg/${tech.name}.svg`}
-              alt={tech.name}
-              class={`h-9 w-auto object-contain transition-transform group-hover:scale-110 opacity-80`}
-              width="36"
-              height="36"
-              loading="lazy"
-            />
-            <span class="text-lg font-medium text-[var(--white-icon)]">
-              {tech.name.charAt(0).toUpperCase() + tech.name.slice(1)}
-            </span>
-            <div class="w-full h-2 bg-gray-700 rounded-full overflow-hidden mt-1 mb-1">
-              <div
-                class={`h-full rounded-full transition-all duration-500 ${mastered ? "rainbow-bar" : "bg-blue-500"}`}
-                style={`width: ${tech.percent}%`}
-              ></div>
-            </div>
-            <span class="text-xs text-gray-300">{tech.percent}%</span>
-            <span class={`text-xs font-semibold ${mastered ? "rainbow-text" : "text-blue-300"}`}>{level}</span>
-          </div>
-        );
-      })
-    }
+
+<div class="relative overflow-x-hidden py-8">
+  <div class="pointer-events-none absolute inset-y-0 left-0 w-32 bg-gradient-to-r from-[var(--background)] to-transparent z-20"></div>
+  <div class="pointer-events-none absolute inset-y-0 right-0 w-32 bg-gradient-to-l from-[var(--background)] to-transparent z-20"></div>
+
+ <div class="flex animate-scroll hover:animate-paused gap-12 md:gap-20 w-max">
+    {[...technologies, ...technologies, ...technologies].map((tech) => (
+      <img
+        src={`/svg/${tech.name}.svg`}
+        alt={tech.name}
+        class="h-12 w-auto object-contain opacity-80 transition-transform hover:scale-110"
+        width="48"
+        height="48"
+        loading="lazy"
+      />
+    ))}
   </div>
 </div>
 
@@ -71,39 +41,8 @@ function isMastered(percent) {
   @media (min-width: 768px) {
     .animate-scroll { animation-duration: 50s; }
   }
-
-  @keyframes rainbow-glow-soft {
-    0% { box-shadow: 0 0 8px #ff00cc, 0 0 16px #3333ff; }
-    25% { box-shadow: 0 0 8px #00ffcc, 0 0 16px #ffcc00; }
-    50% { box-shadow: 0 0 8px #00ccff, 0 0 16px #ff00cc; }
-    75% { box-shadow: 0 0 8px #ffcc00, 0 0 16px #00ffcc; }
-    100% { box-shadow: 0 0 8px #ff00cc, 0 0 16px #3333ff; }
-  }
-  .rainbow-glow-soft {
-    animation: rainbow-glow-soft 2s linear infinite;
-  }
-
-  .rainbow-bar {
-    background: linear-gradient(90deg, #ff00cc, #3333ff, #00ffcc, #ffcc00, #ff00cc);
-    background-size: 200% 200%;
-    animation: rainbow-bar-anim 2s linear infinite;
-  }
-  @keyframes rainbow-bar-anim {
-    0% { background-position: 0% 50%; }
-    100% { background-position: 100% 50%; }
-  }
-
-  .rainbow-text {
-    background: linear-gradient(90deg, #ff00cc, #3333ff, #00ffcc, #ffcc00, #ff00cc);
-    background-clip: text;
-    -webkit-background-clip: text;
-    color: transparent;
-    -webkit-text-fill-color: transparent;
-    animation: rainbow-text-anim 2s linear infinite;
-    background-size: 200% 200%;
-  }
-  @keyframes rainbow-text-anim {
-    0% { background-position: 0% 50%; }
-    100% { background-position: 100% 50%; }
+  
+  .animate-paused:hover {
+    animation-play-state: paused;
   }
 </style>
