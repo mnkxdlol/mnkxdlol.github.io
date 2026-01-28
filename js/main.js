@@ -14,26 +14,35 @@ function initClock() {
     if (!myTime || !yourTime) return;
     
     const userTz = Intl.DateTimeFormat().resolvedOptions().timeZone;
-    const tzAbbr = new Date().toLocaleTimeString('en-US', { timeZoneName: 'short' }).split(' ').pop();
+    
+    const tzAbbr = new Date().toLocaleTimeString('en-US', { 
+        timeZone: userTz,
+        timeZoneName: 'short' 
+    }).split(' ').pop();
+    
     if (yourTz) yourTz.textContent = tzAbbr;
+    
+    const timeOptions = {
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        hour12: false
+    };
     
     function update() {
         const now = new Date();
-        myTime.textContent = now.toLocaleTimeString('fr-FR', {
-            timeZone: 'Europe/Paris',
-            hour: '2-digit',
-            minute: '2-digit',
-            second: '2-digit',
-            hour12: false
+        
+        myTime.textContent = now.toLocaleTimeString('en-GB', {
+            ...timeOptions,
+            timeZone: 'Europe/Paris'
         });
-        yourTime.textContent = now.toLocaleTimeString('fr-FR', {
-            timeZone: userTz,
-            hour: '2-digit',
-            minute: '2-digit',
-            second: '2-digit',
-            hour12: false
+        
+        yourTime.textContent = now.toLocaleTimeString('en-GB', {
+            ...timeOptions,
+            timeZone: userTz
         });
     }
+    
     update();
     setInterval(update, 1000);
 }
