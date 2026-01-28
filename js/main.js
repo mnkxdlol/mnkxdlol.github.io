@@ -6,10 +6,16 @@ function initCardAnimation() {
 }
 
 // dual clock
+
 function initClock() {
     const myTime = document.getElementById('my-time');
     const yourTime = document.getElementById('your-time');
+    const yourTz = document.getElementById('your-tz');
     if (!myTime || !yourTime) return;
+    
+    const userTz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    const tzAbbr = new Date().toLocaleTimeString('en-US', { timeZoneName: 'short' }).split(' ').pop();
+    if (yourTz) yourTz.textContent = tzAbbr;
     
     function update() {
         const now = new Date();
@@ -21,6 +27,7 @@ function initClock() {
             hour12: false
         });
         yourTime.textContent = now.toLocaleTimeString('fr-FR', {
+            timeZone: userTz,
             hour: '2-digit',
             minute: '2-digit',
             second: '2-digit',
