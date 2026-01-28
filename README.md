@@ -9,3 +9,7 @@
  add the website of ksh
  mayb add a comments system to the blog 
  fix text in about me 
+
+ # Demo 
+
+ you can have a demo of the website here : https://mnk.wtf
